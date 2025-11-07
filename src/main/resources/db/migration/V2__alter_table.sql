@@ -39,6 +39,9 @@ ALTER TABLE order_item
 ALTER TABLE users
     ADD CONSTRAINT uc_users_email UNIQUE (email);
 
+ALTER TABLE users
+    ADD COLUMN password NOT NULL;
+
 ALTER TABLE order_item
     ADD CONSTRAINT FK_ORDERITEM_ON_ORDER FOREIGN KEY (order_id) REFERENCES orders (order_id);
 

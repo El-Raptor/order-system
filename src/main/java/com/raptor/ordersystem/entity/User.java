@@ -39,6 +39,9 @@ public class User {
     @NotNull(message = "Role cannot be null")
     private Role role;
 
+    @NotNull
+    private String password;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders;
 }
