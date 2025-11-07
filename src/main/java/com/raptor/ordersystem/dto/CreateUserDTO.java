@@ -1,6 +1,5 @@
 package com.raptor.ordersystem.dto;
 
-import com.raptor.ordersystem.entity.Order;
 import com.raptor.ordersystem.utility.Role;
 import lombok.*;
 
@@ -16,5 +15,5 @@ public class CreateUserDTO {
     private String email;
     private Role role;
     private String password;
-    private List<Order> orders;
+    private List<OrderDTO> orders;
 }
