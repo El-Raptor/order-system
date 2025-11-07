@@ -7,6 +7,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreateProduct {
+public class CreateProductDTO {
     private String description;
 }

@@ -14,4 +14,5 @@ public class CreateOrderDTO {
     private UserDTO user;
     private LocalDateTime orderDate;
     private List<OrderItemDTO> items;
+    private double total;
 }

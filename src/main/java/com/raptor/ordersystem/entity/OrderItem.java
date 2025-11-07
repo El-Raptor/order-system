@@ -4,22 +4,26 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
-@Entity
-@IdClass(OrderItemId.class)
 @Getter
 @Setter
+@Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+@IdClass(OrderItemId.class)
 public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private int sequence;
 
     @Id
     @ManyToOne
     @JoinColumn(name = "order_id")
+    @EqualsAndHashCode.Include
     private Order order;
 
     @Positive
