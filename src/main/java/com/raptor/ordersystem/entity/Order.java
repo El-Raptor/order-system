@@ -2,24 +2,26 @@ package com.raptor.ordersystem.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
 @Getter
 @Setter
-@NoArgsConstructor @AllArgsConstructor
+@Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
 @Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, name = "order_id")
-    private String orderId;
+    @EqualsAndHashCode.Include
+    private int orderId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -36,3 +38,4 @@ public class Order {
     private double total;
 
 }
+
