@@ -26,10 +26,10 @@ public class OrderItem {
     private int quantity;
 
     @Positive
-    private Double price;
+    private double price;
 
     @Transient
-    private Double total;
+    private double total;
 
     @OneToOne
     @JoinColumn(name = "product_id")

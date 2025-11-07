@@ -14,6 +14,7 @@ CREATE TABLE orders
     order_id   VARCHAR(255)                NOT NULL,
     user_id    INTEGER                     NOT NULL,
     order_date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    total      DOUBLE PRECISION            NOT NULL,
     CONSTRAINT pk_orders PRIMARY KEY (order_id)
 );
 

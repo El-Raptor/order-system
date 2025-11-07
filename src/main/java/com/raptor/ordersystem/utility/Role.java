@@ -1,4 +1,4 @@
-package com.raptor.ordersystem.entity;
+package com.raptor.ordersystem.utility;
 
 public enum Role {
     ADMIN,
