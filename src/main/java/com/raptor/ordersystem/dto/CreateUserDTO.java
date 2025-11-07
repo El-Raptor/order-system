@@ -8,11 +8,10 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
-    private int id;
+@Builder
+public class CreateUserDTO {
     private String name;
     private String email;
     private Role role;
