@@ -43,7 +43,7 @@ public class OrderMapper {
                 .orderDate(orderDTO.getOrderDate())
                 .orderItems(orderDTO.getItems().stream()
                         .map(OrderItemMapper::toEntity)
-                        .toList())
+                            .toList())
                 .total(orderDTO.getTotal())
                 .build();
     }
