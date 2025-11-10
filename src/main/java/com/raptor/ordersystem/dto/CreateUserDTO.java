@@ -15,5 +15,4 @@ public class CreateUserDTO {
     private String email;
     private Role role;
     private String password;
-    private List<OrderDTO> orders;
 }
