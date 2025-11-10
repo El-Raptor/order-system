@@ -40,9 +40,6 @@ public class UserMapper {
                 .email(userDTO.getEmail())
                 .password(userDTO.getPassword())
                 .role(userDTO.getRole())
-                .orders(userDTO.getOrders().stream()
-                        .map(OrderMapper::toEntity)
-                        .toList())
                 .build();
     }
 
