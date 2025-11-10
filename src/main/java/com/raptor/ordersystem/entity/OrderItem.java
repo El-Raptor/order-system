@@ -12,6 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
+@Table(name = "order_items")
 @IdClass(OrderItemId.class)
 public class OrderItem {
 
