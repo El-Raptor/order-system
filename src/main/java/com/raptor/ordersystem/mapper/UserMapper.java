@@ -1,12 +1,19 @@
 package com.raptor.ordersystem.mapper;
 
-import com.raptor.ordersystem.dto.CreateUserDTO;
-import com.raptor.ordersystem.dto.UserDTO;
-import com.raptor.ordersystem.dto.UserOrdersDTO;
-import com.raptor.ordersystem.dto.UserSummaryDTO;
+import com.raptor.ordersystem.dto.*;
 import com.raptor.ordersystem.entity.User;
 
+import java.util.Collections;
+
 public class UserMapper {
+
+    public static UserSummaryDTO toSummaryDTO(User user) {
+        return UserSummaryDTO.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .build();
+    }
 
     public static UserDTO toDto(User user) {
         return UserDTO.builder()
@@ -15,9 +22,11 @@ public class UserMapper {
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .role(user.getRole())
-                .orders(user.getOrders().stream()
-                        .map(OrderMapper::toDto)
-                        .toList())
+                .orders(user.getOrders() != null ?
+                        user.getOrders().stream()
+                                .map(OrderMapper::toDto)
+                                .toList() :
+                        Collections.emptyList())
                 .build();
     }
 
@@ -28,9 +37,11 @@ public class UserMapper {
                 .email(userDTO.getEmail())
                 .password(userDTO.getPassword())
                 .role(userDTO.getRole())
-                .orders(userDTO.getOrders().stream()
-                        .map(OrderMapper::toEntity)
-                        .toList())
+                .orders(userDTO.getOrders() != null ?
+                        userDTO.getOrders().stream()
+                                .map(OrderMapper::toEntity)
+                                .toList() :
+                        Collections.emptyList())
                 .build();
     }
 

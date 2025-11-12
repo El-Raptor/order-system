@@ -1,0 +1,69 @@
+package com.raptor.ordersystem.controller;
+
+import com.raptor.ordersystem.dto.CreateUserDTO;
+import com.raptor.ordersystem.dto.UserDTO;
+import com.raptor.ordersystem.dto.UserSummaryDTO;
+import com.raptor.ordersystem.mapper.UserMapper;
+import com.raptor.ordersystem.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+
+    private final UserService userService;
+
+    UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> findById(@PathVariable int id) {
+        var user = userService.findUserById(id);
+        if (user == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(UserMapper.toDto(user), HttpStatus.OK);
+    }
+
+    @GetMapping("/email")
+    public ResponseEntity<UserDTO> findByEmail(@RequestParam String email) {
+        var user = userService.findUserByEmail(email);
+        if (user == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(UserMapper.toDto(user), HttpStatus.OK);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<UserSummaryDTO> createUser(@RequestBody CreateUserDTO userDTO) {
+        var user = userService.register(userDTO);
+        URI uri = URI.create(String.format("/api/users/%s", user.getId()));
+        return ResponseEntity.created(uri).body(UserMapper.toSummaryDTO(user));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable int id, @RequestBody UserDTO userDTO) {
+        var user = userService.findUserById(id);
+
+        if (user == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        userDTO.setId(id);
+
+        var updatedUser = UserMapper.toDto(userService.alterUser(userDTO));
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable int id) {
+        var user = userService.findUserById(id);
+        if (user == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        userService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+}

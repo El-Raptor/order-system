@@ -1,6 +1,7 @@
 package com.raptor.ordersystem.service;
 
 import com.raptor.ordersystem.dto.CreateUserDTO;
+import com.raptor.ordersystem.dto.UserDTO;
 import com.raptor.ordersystem.dto.UserSummaryDTO;
 import com.raptor.ordersystem.entity.User;
 import com.raptor.ordersystem.mapper.UserMapper;
@@ -27,7 +28,7 @@ public class UserService {
         return userRepo.save(UserMapper.toEntity(userDTO));
     }
 
-    public User alterUser(UserSummaryDTO dto) {
+    public User alterUser(UserDTO dto) {
         return userRepo.save(UserMapper.toEntity(dto));
     }
 
