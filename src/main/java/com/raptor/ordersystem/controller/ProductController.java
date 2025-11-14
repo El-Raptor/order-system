@@ -58,6 +58,8 @@ public class ProductController {
         var product = productService.findById(id);
         if (product == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        productService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 

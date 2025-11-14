@@ -1,5 +1,6 @@
 package com.raptor.ordersystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
@@ -13,17 +14,17 @@ import lombok.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "order_items")
-@IdClass(OrderItemId.class)
 public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_items_id")
     @EqualsAndHashCode.Include
-    private int sequence;
+    private Long orderItemId;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "order_id")
+    @JsonBackReference
     @EqualsAndHashCode.Include
     private Order order;
 

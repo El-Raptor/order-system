@@ -1,43 +1,59 @@
 package com.raptor.ordersystem.mapper;
 
+import com.raptor.ordersystem.dto.AddOrderItemDTO;
 import com.raptor.ordersystem.dto.CreateOrderItemDTO;
 import com.raptor.ordersystem.dto.OrderItemDTO;
 import com.raptor.ordersystem.entity.Order;
 import com.raptor.ordersystem.entity.OrderItem;
+import com.raptor.ordersystem.entity.Product;
 
 public class OrderItemMapper {
+
     public static OrderItemDTO toDto(OrderItem item) {
         return OrderItemDTO.builder()
-                .orderId(item.getOrder().getOrderId())
-                .sequence(item.getSequence())
+                .orderItemId(item.getOrderItemId())
+                .productId(item.getProduct().getProductId())
                 .quantity(item.getQuantity())
                 .price(item.getPrice())
-                .product(ProductMapper.toDto(item.getProduct()))
                 .build();
     }
 
-    public static OrderItem toEntity(OrderItemDTO itemDTO) {
+    public static OrderItem toEntity(OrderItemDTO dto) {
         return OrderItem.builder()
                 .order(Order.builder()
-                        .orderId(itemDTO.getOrderId())
+                        .orderId(dto.getOrderId())
                         .build()
                 )
-                .sequence(itemDTO.getSequence())
-                .quantity(itemDTO.getQuantity())
-                .price(itemDTO.getPrice())
-                .product(ProductMapper.toEntity(itemDTO.getProduct()))
+                .orderItemId(dto.getOrderItemId())
+                .quantity(dto.getQuantity())
+                .price(dto.getPrice())
+                .product(Product.builder().productId(dto.getProductId()).build())
                 .build();
     }
 
     public static OrderItem toEntity(CreateOrderItemDTO itemDTO) {
         return OrderItem.builder()
-                .order(Order.builder()
-                        .orderId(itemDTO.getOrderId())
-                        .build()
-                )
+                .product(Product.builder().productId(itemDTO.getProductId()).build())
                 .quantity(itemDTO.getQuantity())
                 .price(itemDTO.getPrice())
-                .product(ProductMapper.toEntity(itemDTO.getProduct()))
                 .build();
     }
+
+    public static OrderItem toEntity(AddOrderItemDTO dto) {
+        return OrderItem.builder()
+                .order(Order.builder().orderId(dto.getOrderId()).build())
+                .quantity(dto.getQuantity())
+                .price(dto.getPrice())
+                .product(Product.builder().productId(dto.getProductId()).build())
+                .build();
+    }
+
+    /*public static OrderItem toEntity(CreateOrderItemDTO dto, Order order) {
+    return OrderItem.builder()
+            .order(order)
+            .product(ProductMapper.toEntity(dto.getProduct()))
+            .price(dto.getPrice())
+            .quantity(dto.getQuantity())
+            .build();
+}*/
 }

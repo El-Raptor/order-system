@@ -1,9 +1,10 @@
 package com.raptor.ordersystem.mapper;
 
-import com.raptor.ordersystem.dto.CreateOrderDTO;
-import com.raptor.ordersystem.dto.OrderDTO;
-import com.raptor.ordersystem.dto.OrderSummaryDTO;
+import com.raptor.ordersystem.dto.*;
 import com.raptor.ordersystem.entity.Order;
+import com.raptor.ordersystem.entity.User;
+
+import java.util.Collections;
 
 public class OrderMapper {
 
@@ -12,9 +13,12 @@ public class OrderMapper {
                 .orderId(order.getOrderId())
                 .user(UserMapper.toDto(order.getUser()))
                 .orderDate(order.getOrderDate())
-                .items(order.getOrderItems().stream()
+                .items(order.getOrderItems() != null
+                        ? order.getOrderItems().stream()
                         .map(OrderItemMapper::toDto)
-                        .toList())
+                        .toList()
+                        : Collections.emptyList()
+                )
                 .build();
     }
 
@@ -37,14 +41,20 @@ public class OrderMapper {
                 .build();
     }
 
-    public static Order toEntity(CreateOrderDTO orderDTO) {
+    public static Order toEntity(CreateOrderDTO dto) {
         return Order.builder()
-                .user(UserMapper.toEntity(orderDTO.getUser()))
-                .orderDate(orderDTO.getOrderDate())
-                .orderItems(orderDTO.getItems().stream()
-                        .map(OrderItemMapper::toEntity)
-                            .toList())
-                .total(orderDTO.getTotal())
+                .user(User.builder()
+                        .id(dto.getUser().getId())
+                        .build())
+                .orderDate(dto.getOrderDate())
+                .orderItems(
+                        dto.getItems() != null
+                                ? dto.getItems().stream()
+                                .map(OrderItemMapper::toEntity)
+                                .toList()
+                                : Collections.emptyList()
+                )
+                .total(dto.getTotal())
                 .build();
     }
 }

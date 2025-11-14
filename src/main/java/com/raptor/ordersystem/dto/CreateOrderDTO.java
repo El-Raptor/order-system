@@ -13,6 +13,6 @@ import java.util.List;
 public class CreateOrderDTO {
     private UserDTO user;
     private LocalDateTime orderDate;
-    private List<OrderItemDTO> items;
+    private List<CreateOrderItemDTO> items;
     private double total;
 }
