@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class CreateOrderDTO {
-    private UserDTO user;
+    private int userId;
     private LocalDateTime orderDate;
     private List<CreateOrderItemDTO> items;
     private double total;

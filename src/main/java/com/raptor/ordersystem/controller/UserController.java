@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping
 public class UserController {
 
     private final UserService userService;
@@ -21,7 +21,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
     public ResponseEntity<UserDTO> findById(@PathVariable int id) {
         var user = userService.findUserById(id);
         if (user == null)
@@ -29,7 +29,7 @@ public class UserController {
         return new ResponseEntity<>(UserMapper.toDto(user), HttpStatus.OK);
     }
 
-    @GetMapping("/email")
+    @GetMapping("/users/email")
     public ResponseEntity<UserDTO> findByEmail(@RequestParam String email) {
         var user = userService.findUserByEmail(email);
         if (user == null)
@@ -40,11 +40,11 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<UserSummaryDTO> createUser(@RequestBody CreateUserDTO userDTO) {
         var user = userService.register(userDTO);
-        URI uri = URI.create(String.format("/api/users/%s", user.getId()));
+        URI uri = URI.create(String.format("/users/%s", user.getId()));
         return ResponseEntity.created(uri).body(UserMapper.toSummaryDTO(user));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/users/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable int id, @RequestBody UserDTO userDTO) {
         var user = userService.findUserById(id);
 
@@ -57,7 +57,7 @@ public class UserController {
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable int id) {
         var user = userService.findUserById(id);
         if (user == null)

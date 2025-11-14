@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 public class OrderDTO {
     private int orderId;
-    private UserDTO user;
+    private int userId;
     private LocalDateTime orderDate;
     private List<OrderItemDTO> items;
     private double total;

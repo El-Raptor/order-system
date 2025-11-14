@@ -11,7 +11,7 @@ public class OrderMapper {
     public static OrderDTO toDto(Order order) {
         return OrderDTO.builder()
                 .orderId(order.getOrderId())
-                .user(UserMapper.toDto(order.getUser()))
+                .userId(order.getUser().getId())
                 .orderDate(order.getOrderDate())
                 .items(order.getOrderItems() != null
                         ? order.getOrderItems().stream()
@@ -22,15 +22,15 @@ public class OrderMapper {
                 .build();
     }
 
-    public static Order toEntity(OrderDTO orderDTO) {
+    public static Order toEntity(OrderDTO dto) {
         return Order.builder()
-                .orderId(orderDTO.getOrderId())
-                .user(UserMapper.toEntity(orderDTO.getUser()))
-                .orderDate(orderDTO.getOrderDate())
-                .orderItems(orderDTO.getItems().stream()
+                .orderId(dto.getOrderId())
+                .user(User.builder().id(dto.getUserId()).build())
+                .orderDate(dto.getOrderDate())
+                .orderItems(dto.getItems().stream()
                         .map(OrderItemMapper::toEntity)
                         .toList())
-                .total(orderDTO.getTotal())
+                .total(dto.getTotal())
                 .build();
     }
 
@@ -44,7 +44,7 @@ public class OrderMapper {
     public static Order toEntity(CreateOrderDTO dto) {
         return Order.builder()
                 .user(User.builder()
-                        .id(dto.getUser().getId())
+                        .id(dto.getUserId())
                         .build())
                 .orderDate(dto.getOrderDate())
                 .orderItems(
