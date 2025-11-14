@@ -7,7 +7,6 @@ import com.raptor.ordersystem.mapper.UserMapper;
 import com.raptor.ordersystem.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -40,10 +39,6 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<UserSummaryDTO> createUser(@RequestBody CreateUserDTO userDTO) {
-        // Encode password before saving it
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
-        userDTO.setPassword(encoder.encode(userDTO.getPassword()));
-
         var user = userService.register(userDTO);
         URI uri = URI.create(String.format("/users/%s", user.getId()));
         return ResponseEntity.created(uri).body(UserMapper.toSummaryDTO(user));

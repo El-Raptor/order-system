@@ -6,6 +6,7 @@ import com.raptor.ordersystem.dto.UserSummaryDTO;
 import com.raptor.ordersystem.entity.User;
 import com.raptor.ordersystem.mapper.UserMapper;
 import com.raptor.ordersystem.repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,11 +25,17 @@ public class UserService {
         return userRepo.findByEmail(email).orElse(null);
     }
 
-    public User register(CreateUserDTO userDTO) {
-        return userRepo.save(UserMapper.toEntity(userDTO));
+    public User register(CreateUserDTO dto) {
+        // Encode password before saving it
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
+        dto.setPassword(encoder.encode(dto.getPassword()));
+        return userRepo.save(UserMapper.toEntity(dto));
     }
 
     public User alterUser(UserDTO dto) {
+        // Encode password before saving it
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
+        dto.setPassword(encoder.encode(dto.getPassword()));
         return userRepo.save(UserMapper.toEntity(dto));
     }
 
