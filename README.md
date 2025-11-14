@@ -16,7 +16,57 @@ The **Order System API** allows you to:
 ![Java](https://img.shields.io/badge/Java-21-blue?logo=openjdk)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.6-brightgreen?logo=springboot)
 
+## Project Structure
+```
+com.raptor.ordersystem
+├── config
+│   └── BasicSecurity.java
+├── controller
+│   ├── OrderController.java
+│   ├── OrderItemController.java
+│   ├── ProductController.java
+│   └── UserController.java
+├── dto
+│   ├── AddOrderItemDTO.java
+│   ├── CreateOrderDTO.java
+│   ├── CreateOrderItemDTO.java
+│   ├── CreateUserDTO.java
+│   ├── OrderDTO.java
+│   ├── OrderItemDTO.java
+│   ├── OrderSummaryDTO.java
+│   ├── ProductDTO.java
+│   ├── UserDTO.java
+│   ├── UserOrdersDTO.java
+│   └── UserSummaryDTO.java
+├── entity
+│   ├── Order.java
+│   ├── OrderItem.java
+│   ├── Product.java
+│   ├── User.java
+│   └── UserPrincipal.java
+├── mapper
+│   ├── OrderItemMapper.java
+│   ├── OrderMapper.java
+│   ├── ProductMapper.java
+│   └── UserMapper.java
+├── repository
+│   ├── OrderItemRepository.java
+│   ├── OrderRepository.java
+│   ├── ProductRepository.java
+│   └── UserRepository.java
+├── service
+│   ├── CustomUserDetailsService.java
+│   ├── OrderItemService.java
+│   ├── OrderService.java
+│   ├── ProductService.java
+│   └── UserService.java
+├── utility
+│   └── Role.java
+└── OrderSystemApplication.java
+```
+
 ## Running The Application
+
 
 ## Dependencies
 
@@ -31,9 +81,16 @@ The **Order System API** allows you to:
 
 ## Roadmap
 
-### Version 1.0
+### Version 0.1.0
 - [x] Create initial project structure with Spring Boot
-- [ ] Implement the CRUD for Users, Orders, OrderItems, and Products
+- [x] Add PostgreSQL database.
+- [x] Add Flyway migrations
+- [x] Implement the CRUD for Users, Orders, OrderItems, and Products
+- [x] Implement Spring Security and Login
+
+### Version 0.2.0 - Business Logic
+- [ ] Add user's role business logic
+- [ ] Add JWT
 
 ## 👤 Author
 
