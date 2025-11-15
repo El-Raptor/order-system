@@ -1,7 +1,6 @@
 package com.raptor.ordersystem.service;
 
 import com.raptor.ordersystem.dto.AddOrderItemDTO;
-import com.raptor.ordersystem.dto.CreateOrderItemDTO;
 import com.raptor.ordersystem.entity.OrderItem;
 import com.raptor.ordersystem.mapper.OrderItemMapper;
 import com.raptor.ordersystem.repository.OrderItemRepository;
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Deprecated
 public class OrderItemService {
     private final OrderItemRepository orderItemRepo;
 
@@ -28,7 +28,7 @@ public class OrderItemService {
         return orderItemRepo.findById(orderItemId).orElse(null);
     }
 
-    public OrderItem createOrderItem(AddOrderItemDTO dto) {
+    public OrderItem addItem(AddOrderItemDTO dto) {
         return orderItemRepo.save(OrderItemMapper.toEntity(dto));
     }
 

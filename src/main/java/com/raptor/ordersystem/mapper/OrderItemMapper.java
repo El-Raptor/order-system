@@ -10,6 +10,9 @@ import com.raptor.ordersystem.entity.Product;
 public class OrderItemMapper {
 
     public static OrderItemDTO toDto(OrderItem item) {
+        if (item.getTotal() == 0)
+            item.setTotal(item.getPrice() * item.getQuantity());
+
         return OrderItemDTO.builder()
                 .orderItemId(item.getOrderItemId())
                 .productId(item.getProduct().getProductId())
