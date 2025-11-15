@@ -71,6 +71,16 @@ public class OrderController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
+    @PostMapping("{orderId}/items")
+    public ResponseEntity<OrderDTO> deleteAllItemsByOrderId(@PathVariable int orderId) {
+        var order = orderService.findById(orderId);
+        if (order == null)
+            return ResponseEntity.notFound().build();
+
+        OrderDTO dto = OrderMapper.toDto(orderService.removeAllItems(orderId));
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable int id) {
         var order = orderService.findById(id);

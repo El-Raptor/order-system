@@ -85,6 +85,16 @@ public class OrderService {
         return order;
     }
 
+    @Transactional
+    public Order removeAllItems(Integer orderId) {
+        Order order = orderRepo.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        order.getOrderItems().clear();
+        recalculateTotal(order);
+        return order;
+    }
+
     /**
      * Creates an order without items.
      *
