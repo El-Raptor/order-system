@@ -1,7 +1,9 @@
 package com.raptor.ordersystem.service;
 
+import com.raptor.ordersystem.dto.AddOrderItemDTO;
 import com.raptor.ordersystem.entity.Order;
 import com.raptor.ordersystem.entity.OrderItem;
+import com.raptor.ordersystem.mapper.OrderItemMapper;
 import com.raptor.ordersystem.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,25 +29,81 @@ public class OrderService {
 
     @Transactional
     public Order save(Order order) {
-        List<OrderItem> items = order.getOrderItems();
-        order = Order.builder()
-                .user(order.getUser())
-                .orderDate(order.getOrderDate())
-                .total(order.getTotal())
-                .build();
+        List<OrderItem> items = order.getOrderItems(); // Extract items from order
 
-        Order savedOrder = orderRepo.save(order);
+        Order savedOrder = orderRepo.save(processOrder(order));
+        processOrderItems(items, savedOrder);
 
-        items.forEach(i -> i.setOrder(savedOrder));
+        recalculateTotal(savedOrder); // Calculate order's total.
 
-        savedOrder.setOrderItems(new ArrayList<>(items));
-        orderRepo.save(savedOrder);
-
-        return savedOrder;
+        return orderRepo.save(savedOrder);
     }
 
     public void deleteById(Integer id) {
         orderRepo.deleteById(id);
     }
 
+    /**
+     * Adds a new item to an existing order.
+     *
+     * @param id  Order ID.
+     * @param dto New item DTO.
+     * @return <code>Order</code> Order with added item.
+     */
+    @Transactional
+    public Order addItemToOrder(int id, AddOrderItemDTO dto) {
+
+        Order order = orderRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        OrderItem newItem = OrderItemMapper.toEntity(dto);
+        newItem.setOrder(order);
+        order.getOrderItems().add(newItem);
+
+        recalculateTotal(order);
+
+        return orderRepo.save(order);
+    }
+
+    /**
+     * Creates an order without items.
+     *
+     * @param order with items that will be cloned with no items.
+     * @return <code>Order</code> Order created.
+     */
+    private Order processOrder(Order order) {
+
+        // Creates an Order without items
+        order = Order.builder()
+                .user(order.getUser())
+                .orderDate(order.getOrderDate())
+                .build();
+
+        return order;
+    }
+
+    /**
+     * Set orders to list of items and set items to given order.
+     *
+     * @param items Order items to be set
+     * @param order Order to be set
+     */
+    private void processOrderItems(List<OrderItem> items, Order order) {
+        items.forEach(i -> i.setOrder(order));
+        order.setOrderItems(new ArrayList<>(items));
+    }
+
+    /**
+     * Calculate order's total based on its items.
+     *
+     * @param order order to have its total price calculated.
+     */
+    private void recalculateTotal(Order order) {
+        List<OrderItem> items = order.getOrderItems();
+        double total = items.stream()
+                .mapToDouble(i -> i.getPrice() * i.getQuantity())
+                .sum();
+
+        order.setTotal(total);
+    }
 }
