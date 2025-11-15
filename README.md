@@ -87,6 +87,8 @@ com.raptor.ordersystem
 - [x] Add Flyway migrations
 - [x] Implement the CRUD for Users, Orders, OrderItems, and Products
 - [x] Implement Spring Security and Login
+- [x] Dockerize app with Dockerfile and Docker Compose yaml file
+- [x] Create CI workflow for GitHub Actions
 
 ### Version 0.2.0 - Business Logic
 - [ ] Add user's role business logic
