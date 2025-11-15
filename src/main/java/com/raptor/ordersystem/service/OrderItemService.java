@@ -18,7 +18,10 @@ public class OrderItemService {
     }
 
     public List<OrderItem> findAllByOrderId(int orderId) {
-        return orderItemRepo.findAllByOrderId(orderId);
+        var items = orderItemRepo.findAllByOrderId(orderId);
+        items.forEach(i -> i.setTotal(i.getPrice()*i.getQuantity()));
+
+        return items;
     }
 
     public OrderItem findById(int orderItemId) {

@@ -15,6 +15,7 @@ public class OrderItemMapper {
                 .productId(item.getProduct().getProductId())
                 .quantity(item.getQuantity())
                 .price(item.getPrice())
+                .total(item.getTotal())
                 .build();
     }
 
@@ -48,12 +49,4 @@ public class OrderItemMapper {
                 .build();
     }
 
-    /*public static OrderItem toEntity(CreateOrderItemDTO dto, Order order) {
-    return OrderItem.builder()
-            .order(order)
-            .product(ProductMapper.toEntity(dto.getProduct()))
-            .price(dto.getPrice())
-            .quantity(dto.getQuantity())
-            .build();
-}*/
 }
