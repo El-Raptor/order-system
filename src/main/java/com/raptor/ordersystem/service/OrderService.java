@@ -1,9 +1,7 @@
 package com.raptor.ordersystem.service;
 
-import com.raptor.ordersystem.dto.AddOrderItemDTO;
 import com.raptor.ordersystem.entity.Order;
 import com.raptor.ordersystem.entity.OrderItem;
-import com.raptor.ordersystem.mapper.OrderItemMapper;
 import com.raptor.ordersystem.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +37,11 @@ public class OrderService {
         return orderRepo.save(savedOrder);
     }
 
+    /**
+     * Deletes an order by its Id.
+     *
+     * @param id Id from order to be removed.
+     */
     public void deleteById(Integer id) {
         orderRepo.deleteById(id);
     }
@@ -46,23 +49,50 @@ public class OrderService {
     /**
      * Adds a new item to an existing order.
      *
-     * @param id  Order ID.
-     * @param dto New item DTO.
+     * @param id      Order ID.
+     * @param newItem New item.
      * @return <code>Order</code> Order with added item.
      */
     @Transactional
-    public Order addItemToOrder(int id, AddOrderItemDTO dto) {
-
+    public Order addItemToOrder(int id, OrderItem newItem) {
         Order order = orderRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
 
-        OrderItem newItem = OrderItemMapper.toEntity(dto);
         newItem.setOrder(order);
         order.getOrderItems().add(newItem);
+        recalculateTotal(order);
+        return orderRepo.save(order);
+    }
+
+    /**
+     * Removes an item from order
+     *
+     * @param orderId Order's id that will have an item removed.
+     * @param itemId  Id from Item to be removed
+     */
+    @Transactional
+    public Order removeItemFromOrder(int orderId, int itemId) {
+        Order order = orderRepo.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        boolean removed = order.getOrderItems()
+                .removeIf(i -> i.getOrderItemId() == itemId);
+
+        if (!removed)
+            throw new RuntimeException("Item not found");
 
         recalculateTotal(order);
+        return order;
+    }
 
-        return orderRepo.save(order);
+    @Transactional
+    public Order removeAllItems(Integer orderId) {
+        Order order = orderRepo.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        order.getOrderItems().clear();
+        recalculateTotal(order);
+        return order;
     }
 
     /**
