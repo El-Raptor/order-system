@@ -2,24 +2,19 @@ package com.raptor.ordersystem.service;
 
 import com.raptor.ordersystem.entity.Order;
 import com.raptor.ordersystem.entity.OrderItem;
-import com.raptor.ordersystem.repository.OrderItemRepository;
 import com.raptor.ordersystem.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class OrderService {
     private final OrderRepository orderRepo;
 
-    private final OrderItemRepository orderItemRepo;
-
-    public OrderService(OrderRepository orderRepo, OrderItemRepository orderItemRepo) {
+    public OrderService(OrderRepository orderRepo) {
         this.orderRepo = orderRepo;
-        this.orderItemRepo = orderItemRepo;
     }
 
     public List<Order> findByUserId(Integer id) {
