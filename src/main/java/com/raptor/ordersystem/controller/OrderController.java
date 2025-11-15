@@ -1,7 +1,9 @@
 package com.raptor.ordersystem.controller;
 
+import com.raptor.ordersystem.dto.AddOrderItemDTO;
 import com.raptor.ordersystem.dto.CreateOrderDTO;
 import com.raptor.ordersystem.dto.OrderDTO;
+import com.raptor.ordersystem.mapper.OrderItemMapper;
 import com.raptor.ordersystem.mapper.OrderMapper;
 import com.raptor.ordersystem.service.OrderService;
 import org.springframework.http.HttpStatus;
@@ -22,7 +24,7 @@ public class OrderController {
     }
 
     @GetMapping("/userId")
-    public ResponseEntity<List<OrderDTO>> findOrdersByUserId(@RequestParam Integer userId) {
+    public ResponseEntity<List<OrderDTO>> findOrdersByUserId(@RequestParam int userId) {
         var orders = orderService.findByUserId(userId);
         if (orders.isEmpty())
             return ResponseEntity.notFound().build();
@@ -34,7 +36,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderDTO> findOrderById(@PathVariable Integer id) {
+    public ResponseEntity<OrderDTO> findOrderById(@PathVariable int id) {
         var order = orderService.findById(id);
         if (order == null)
             return ResponseEntity.notFound().build();
@@ -49,8 +51,28 @@ public class OrderController {
         return ResponseEntity.created(uri).body(OrderMapper.toDto(savedOrder));
     }
 
+    @PostMapping("/{id}")
+    public ResponseEntity<OrderDTO> addItemToOrder(
+            @PathVariable int id,
+            @RequestBody AddOrderItemDTO dto) {
+        OrderDTO orderDTO = OrderMapper.toDto(orderService.addItemToOrder(id, OrderItemMapper.toEntity(dto)));
+        return ResponseEntity.ok(orderDTO);
+    }
+
+    @PostMapping("{orderId}/items/{itemId}")
+    public ResponseEntity<OrderDTO> deleteItemById(
+            @PathVariable int orderId,
+            @PathVariable int itemId) {
+        var order = orderService.findById(orderId);
+        if (order == null)
+            return ResponseEntity.notFound().build();
+
+        OrderDTO dto = OrderMapper.toDto(orderService.removeItemFromOrder(orderId, itemId));
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteById(@PathVariable int id) {
         var order = orderService.findById(id);
         if (order == null)
             return ResponseEntity.notFound().build();
