@@ -55,8 +55,12 @@ public class OrderController {
     public ResponseEntity<OrderDTO> addItemToOrder(
             @PathVariable int id,
             @RequestBody AddOrderItemDTO dto) {
-        OrderDTO orderDTO = OrderMapper.toDto(orderService.addItemToOrder(id, OrderItemMapper.toEntity(dto)));
-        return ResponseEntity.ok(orderDTO);
+        try {
+            OrderDTO orderDTO = OrderMapper.toDto(orderService.addItemToOrder(id, OrderItemMapper.toEntity(dto)));
+            return ResponseEntity.ok(orderDTO);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping("{orderId}/items/{itemId}")
