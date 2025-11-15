@@ -3,6 +3,7 @@ package com.raptor.ordersystem.service;
 import com.raptor.ordersystem.dto.AddOrderItemDTO;
 import com.raptor.ordersystem.entity.Order;
 import com.raptor.ordersystem.entity.OrderItem;
+import com.raptor.ordersystem.mapper.OrderItemMapper;
 import com.raptor.ordersystem.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,9 +43,26 @@ public class OrderService {
         orderRepo.deleteById(id);
     }
 
+    /**
+     * Adds a new item to an existing order.
+     *
+     * @param id  Order ID.
+     * @param dto New item DTO.
+     * @return <code>Order</code> Order with added item.
+     */
     @Transactional
-    public Order addItemToOrder(AddOrderItemDTO dto, int id) {
+    public Order addItemToOrder(int id, AddOrderItemDTO dto) {
 
+        Order order = orderRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        OrderItem newItem = OrderItemMapper.toEntity(dto);
+        newItem.setOrder(order);
+        order.getOrderItems().add(newItem);
+
+        recalculateTotal(order);
+
+        return orderRepo.save(order);
     }
 
     /**
