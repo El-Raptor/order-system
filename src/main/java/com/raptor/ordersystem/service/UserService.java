@@ -104,7 +104,7 @@ public class UserService {
     /**
      * Encodes a plaintext password using Bcrypt hash function.
      *
-     * @param user the uses that will have their password encoded.
+     * @param user the user that will have their password encoded.
      */
     private void encodePassword(User user) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
