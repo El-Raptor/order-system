@@ -3,6 +3,7 @@ package com.raptor.ordersystem.controller;
 import com.raptor.ordersystem.dto.CreateUserDTO;
 import com.raptor.ordersystem.dto.UserDTO;
 import com.raptor.ordersystem.dto.UserSummaryDTO;
+import com.raptor.ordersystem.entity.User;
 import com.raptor.ordersystem.mapper.UserMapper;
 import com.raptor.ordersystem.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -38,22 +39,22 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserSummaryDTO> createUser(@RequestBody CreateUserDTO userDTO) {
-        var user = userService.register(userDTO);
+    public ResponseEntity<UserSummaryDTO> createUser(@RequestBody CreateUserDTO dto) {
+        var user = userService.register(UserMapper.toEntity(dto));
         URI uri = URI.create(String.format("/users/%s", user.getId()));
         return ResponseEntity.created(uri).body(UserMapper.toSummaryDTO(user));
     }
 
     @PutMapping("/users/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable int id, @RequestBody UserDTO userDTO) {
-        var user = userService.findUserById(id);
+        User user = userService.findUserById(id);
 
         if (user == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         userDTO.setId(id);
-
-        var updatedUser = UserMapper.toDto(userService.alterUser(userDTO));
+        user = UserMapper.toEntity(userDTO);
+        var updatedUser = UserMapper.toDto(userService.alterUser(user));
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
