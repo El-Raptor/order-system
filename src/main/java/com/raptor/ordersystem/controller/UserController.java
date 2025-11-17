@@ -39,8 +39,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserSummaryDTO> createUser(@RequestBody CreateUserDTO userDTO) {
-        var user = userService.register(userDTO);
+    public ResponseEntity<UserSummaryDTO> createUser(@RequestBody CreateUserDTO dto) {
+        var user = userService.register(UserMapper.toEntity(dto));
         URI uri = URI.create(String.format("/users/%s", user.getId()));
         return ResponseEntity.created(uri).body(UserMapper.toSummaryDTO(user));
     }

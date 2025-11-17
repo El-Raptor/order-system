@@ -17,10 +17,14 @@ public class UserService {
     }
 
     /**
-     * Find a user by its ID.
+     * Retrieves a user based on the provided ID.
      *
-     * @param id User id
-     * @return <code>User</code> User based on the given Id.
+     * <p>Access is restricted by a security rule: the authenticated user
+     * may retrieve their own information, while users with the ADMIN role
+     * may retrieve any user's data.</p>
+     *
+     * @param id the ID used to look up the user.
+     * @return the {@code User} associated with the given ID.
      */
     @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
     public User findUserById(Integer id) {
@@ -49,14 +53,12 @@ public class UserService {
      * <p>The method encodes the provided plaintext password before persisting the user data
      * to the database.</p>
      *
-     * @param dto the DTO containing the user information to create.
+     * @param user the object containing the user information to create.
      * @return the newly created user entity.
      */
-    public User register(CreateUserDTO dto) {
-        // Encode password before saving it
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
-        dto.setPassword(encoder.encode(dto.getPassword()));
-        return userRepo.save(UserMapper.toEntity(dto));
+    public User register(User user) {
+        encodePassword(user);
+        return userRepo.save(user);
     }
 
     /**
@@ -67,7 +69,7 @@ public class UserService {
      * <p>The method encodes the provided plaintext password before persisting the user data
      * to the database.</p>
      *
-     * @param user the DTO containing the user information to create.
+     * @param user the object containing the user information to create.
      * @return the {@code User} associated with the given ID.
      */
     @PreAuthorize("#user.getId() == authentication.principal.id")
