@@ -1,8 +1,6 @@
 package com.raptor.ordersystem.service;
 
-import com.raptor.ordersystem.dto.CreateUserDTO;
 import com.raptor.ordersystem.entity.User;
-import com.raptor.ordersystem.mapper.UserMapper;
 import com.raptor.ordersystem.repository.UserRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
