@@ -28,7 +28,7 @@ public class UserService {
         return userRepo.findById(id).orElse(null);
     }
 
-    //@PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
+    @PreAuthorize("#email == authentication.principal.email or hasRole('ADMIN')")
     public User findUserByEmail(String email) {
         return userRepo.findByEmail(email).orElse(null);
     }
