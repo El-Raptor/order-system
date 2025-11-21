@@ -3,15 +3,23 @@ package com.raptor.ordersystem.service;
 import com.raptor.ordersystem.entity.User;
 import com.raptor.ordersystem.repository.UserRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
     private final UserRepository userRepo;
+    private final AuthenticationManager authManager;
+    private final JWTService jwtService;
 
-    public UserService(UserRepository userRepo) {
+    public UserService(UserRepository userRepo, AuthenticationManager authManager, JWTService jwtService) {
         this.userRepo = userRepo;
+        this.authManager = authManager;
+        this.jwtService = jwtService;
     }
 
     /**
@@ -99,6 +107,25 @@ public class UserService {
 
     public void deleteById(Integer id) {
         userRepo.deleteById(id);
+    }
+
+    /**
+     * Verifies user identity.
+     *
+     * @param user
+     * @return
+     */
+    public String verify(User user) {
+        Authentication authentication =
+                authManager.authenticate(new UsernamePasswordAuthenticationToken(
+                        user.getEmail()
+                        , user.getPassword()
+                ));
+
+        if (!authentication.isAuthenticated())
+            throw new UsernameNotFoundException("Invalid username or password.");
+
+        return jwtService.generateToken(user);
     }
 
     /**
