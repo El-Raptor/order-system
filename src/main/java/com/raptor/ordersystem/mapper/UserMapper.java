@@ -30,6 +30,14 @@ public class UserMapper {
                 .build();
     }
 
+    public static User toEntity(UserLoginDTO dto) {
+        return User
+                .builder()
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .build();
+    }
+
     public static User toEntity(UserDTO userDTO) {
         return User.builder()
                 .id(userDTO.getId())

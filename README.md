@@ -1,4 +1,8 @@
 # Order System API
+![Java](https://img.shields.io/badge/Java-21-blue?logo=openjdk)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.6-brightgreen?logo=springboot)
+![Spring Security](https://img.shields.io/badge/Spring%20Security-6.5.6-brightgreen?logo=springsecurity)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17.0-brightgreen?logo=postgreSQL)
 
 A RESTful API for managing orders. Built with **Java 21**, **Spring Boot 3.5.6**.
 The project provides CRUD operations for customers, orders and products, following best practices in REST design and documentation wint OpenAPI/Swagger.
@@ -13,8 +17,7 @@ The **Order System API** allows you to:
 
 ## Tech Stack
 
-![Java](https://img.shields.io/badge/Java-21-blue?logo=openjdk)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.6-brightgreen?logo=springboot)
+
 
 ## Project Structure
 ```
@@ -23,7 +26,7 @@ com.raptor.ordersystem
 │   └── BasicSecurity.java
 ├── controller
 │   ├── OrderController.java
-│   ├── OrderItemController.java
+│   ├── OrderItemController.java [DEPRECATED]
 │   ├── ProductController.java
 │   └── UserController.java
 ├── dto
@@ -32,10 +35,11 @@ com.raptor.ordersystem
 │   ├── CreateOrderItemDTO.java
 │   ├── CreateUserDTO.java
 │   ├── OrderDTO.java
-│   ├── OrderItemDTO.java
+│   ├── OrderItemDTO.java [DEPRECATED]
 │   ├── OrderSummaryDTO.java
 │   ├── ProductDTO.java
 │   ├── UserDTO.java
+│   ├── UserLoginDTO.java
 │   ├── UserOrdersDTO.java
 │   └── UserSummaryDTO.java
 ├── entity
@@ -44,6 +48,11 @@ com.raptor.ordersystem
 │   ├── Product.java
 │   ├── User.java
 │   └── UserPrincipal.java
+├── exception
+│   ├── ApiError.java
+│   └── GlobalExceptionHandler.java
+├── filter
+│   └── JwtFilter.java
 ├── mapper
 │   ├── OrderItemMapper.java
 │   ├── OrderMapper.java
@@ -56,8 +65,9 @@ com.raptor.ordersystem
 │   └── UserRepository.java
 ├── service
 │   ├── CustomUserDetailsService.java
+│   ├── JWTService.java
 │   ├── OrderItemService.java
-│   ├── OrderService.java
+│   ├── OrderService.java [DEPRECATED]
 │   ├── ProductService.java
 │   └── UserService.java
 ├── utility
@@ -78,6 +88,9 @@ com.raptor.ordersystem
 - `lombok`
 - `flyway-core`
 - `flyway-database-postgresql`
+- `jjwt`
+- `jjwt-jackson`
+- `jjwt-impl`
 
 ## Roadmap
 
@@ -91,8 +104,11 @@ com.raptor.ordersystem
 - [x] Create CI workflow for GitHub Actions
 
 ### Version 0.2.0 - Business Logic
-- [ ] Add user's role business logic
-- [ ] Add JWT
+- [x] Add user's role business logic
+- [x] Add user's login business logic
+- [x] Add order and order items business logic
+- [x] Add global exception handler
+- [x] Add JWT
 
 ## 👤 Author
 

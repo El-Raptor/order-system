@@ -1,5 +1,6 @@
 package com.raptor.ordersystem.entity;
 
+import com.raptor.ordersystem.utility.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,9 +16,25 @@ public class UserPrincipal implements UserDetails {
         this.user = user;
     }
 
+    public int getId() {
+        return user.getId();
+    }
+
+    public String getName() {
+        return user.getName();
+    }
+
+    public String getEmail() {
+        return user.getEmail();
+    }
+
+    public Role getRole() {
+        return user.getRole();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
     }
 
     @Override

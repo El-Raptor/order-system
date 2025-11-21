@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/order-items")
+@Deprecated
 public class OrderItemController {
 
     private final OrderItemService orderItemService;
@@ -34,7 +35,7 @@ public class OrderItemController {
 
     @PostMapping("/")
     public ResponseEntity<OrderItemDTO> addOrderItem(@RequestBody AddOrderItemDTO dto) {
-        var orderItem = orderItemService.createOrderItem(dto);
+        var orderItem = orderItemService.addItem(dto);
         URI uri = URI.create("/api/order-items/" + orderItem.getOrder().getOrderId());
         return ResponseEntity.created(uri).body(OrderItemMapper.toDto(orderItem));
     }

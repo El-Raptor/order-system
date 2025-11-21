@@ -7,11 +7,13 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Deprecated
 public class OrderItemDTO {
     private Long orderItemId;
     private int orderId;
     private int productId;
     private int quantity;
     private double price;
+    private double total;
 }
 

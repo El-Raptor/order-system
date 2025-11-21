@@ -10,11 +10,15 @@ import com.raptor.ordersystem.entity.Product;
 public class OrderItemMapper {
 
     public static OrderItemDTO toDto(OrderItem item) {
+        if (item.getTotal() == 0)
+            item.setTotal(item.getPrice() * item.getQuantity());
+
         return OrderItemDTO.builder()
                 .orderItemId(item.getOrderItemId())
                 .productId(item.getProduct().getProductId())
                 .quantity(item.getQuantity())
                 .price(item.getPrice())
+                .total(item.getTotal())
                 .build();
     }
 
@@ -48,12 +52,4 @@ public class OrderItemMapper {
                 .build();
     }
 
-    /*public static OrderItem toEntity(CreateOrderItemDTO dto, Order order) {
-    return OrderItem.builder()
-            .order(order)
-            .product(ProductMapper.toEntity(dto.getProduct()))
-            .price(dto.getPrice())
-            .quantity(dto.getQuantity())
-            .build();
-}*/
 }
