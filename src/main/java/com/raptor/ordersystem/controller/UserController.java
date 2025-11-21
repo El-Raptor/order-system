@@ -2,6 +2,7 @@ package com.raptor.ordersystem.controller;
 
 import com.raptor.ordersystem.dto.CreateUserDTO;
 import com.raptor.ordersystem.dto.UserDTO;
+import com.raptor.ordersystem.dto.UserLoginDTO;
 import com.raptor.ordersystem.dto.UserSummaryDTO;
 import com.raptor.ordersystem.entity.User;
 import com.raptor.ordersystem.mapper.UserMapper;
@@ -43,6 +44,12 @@ public class UserController {
         var user = userService.register(UserMapper.toEntity(dto));
         URI uri = URI.create(String.format("/users/%s", user.getId()));
         return ResponseEntity.created(uri).body(UserMapper.toSummaryDTO(user));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody UserLoginDTO dto) {
+        var response = userService.verify(UserMapper.toEntity(dto));
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/users/{id}")

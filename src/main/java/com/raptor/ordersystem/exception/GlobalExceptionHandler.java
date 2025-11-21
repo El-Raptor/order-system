@@ -2,6 +2,7 @@ package com.raptor.ordersystem.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,6 +20,17 @@ public class GlobalExceptionHandler {
                 req.getDescription(false).replace("uri=", "")
         );
         return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiError> handleBadCredentials(BadCredentialsException ex, WebRequest req) {
+        var error = new ApiError(
+                HttpStatus.UNAUTHORIZED.value(),
+                "E-mail or password is incorrect",
+                ex.getMessage(),
+                req.getDescription(false).replace("uri=", "")
+        );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
     @ExceptionHandler(AuthorizationDeniedException.class)
